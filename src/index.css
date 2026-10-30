@@ -1,0 +1,195 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark, .dark *));
+
+/* ========================================================
+   LOCAL FONT FALLBACKS (Guaranteed Offline / Standalone Access)
+   ======================================================== */
+@font-face {
+  font-family: 'LocalArialFallback';
+  src: url('/fonts/arial.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LocalArialFallback';
+  src: url('/fonts/arial-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  font-size: 16px; /* default 100% */
+}
+
+/* Dynamic Font Size Scaling */
+html[data-font-size="compact"] {
+  font-size: 14.5px; /* ~90% */
+}
+
+html[data-font-size="normal"] {
+  font-size: 16px; /* 100% */
+}
+
+html[data-font-size="large"] {
+  font-size: 17.5px; /* ~110% */
+}
+
+html[data-font-size="xlarge"] {
+  font-size: 19px; /* ~120% */
+}
+
+html.dark, :root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* ========================================================
+   ROBUST FONT FALLBACK STACKS (Web + Mobile + System Fallbacks)
+   ======================================================== */
+:root {
+  --font-fallback-arabic: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Readex Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Geeza Pro', 'LocalArialFallback', 'Tahoma', Arial, sans-serif;
+  --app-font: 'Alexandria', var(--font-fallback-arabic);
+}
+
+html[data-font="alexandria"] { 
+  --app-font: 'Alexandria', var(--font-fallback-arabic); 
+}
+html[data-font="ibm"] { 
+  --app-font: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Alexandria', var(--font-fallback-arabic); 
+}
+html[data-font="noto"] { 
+  --app-font: 'Noto Sans Arabic', 'IBM Plex Sans Arabic', 'Alexandria', var(--font-fallback-arabic); 
+}
+html[data-font="readex"] { 
+  --app-font: 'Readex Pro', 'IBM Plex Sans Arabic', var(--font-fallback-arabic); 
+}
+
+@layer base {
+  html, body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    touch-action: manipulation;
+    overscroll-behavior-y: none;
+    -webkit-user-select: none;
+    user-select: none;
+
+    /* Anti-aliasing & crisp subpixel font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+  }
+
+  input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  body {
+    font-family: var(--app-font);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    font-size: 0.9375rem; /* 15px comfortable base body size */
+    line-height: 1.55;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* Universal typography: Use chosen app font with resilient fallbacks */
+  html,
+  body,
+  button,
+  input,
+  select,
+  textarea,
+  h1, h2, h3, h4, h5, h6,
+  p, span, label,
+  * {
+    font-family: var(--app-font) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Explicit Arabic text styling & anti-clipping line clearance */
+  .arabic-text,
+  [lang="ar"],
+  [dir="rtl"] {
+    font-family: var(--app-font) !important;
+    text-rendering: optimizeLegibility;
+    line-height: 1.58;
+  }
+
+  /* Tabular numbers for financial balance and accounting values */
+  .tabular-nums,
+  [data-numeric="true"],
+  .font-mono {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-family: var(--app-font) !important;
+  }
+
+  /* Prevent Arabic clipping in truncating flex containers (Hamzas, Dots, Descenders) */
+  .truncate,
+  [class*="truncate"] {
+    overflow-clip-margin: 0.28em !important;
+    padding-block: 2px !important;
+  }
+
+  /* Prevent tight line-height from cutting off Arabic ascenders and descenders */
+  [dir="rtl"] .leading-tight,
+  [lang="ar"] .leading-tight,
+  .arabic-text.leading-tight {
+    line-height: 1.38 !important;
+  }
+
+  [dir="rtl"] .leading-none,
+  [lang="ar"] .leading-none,
+  .arabic-text.leading-none {
+    line-height: 1.25 !important;
+  }
+
+  [dir="rtl"] .leading-normal,
+  [lang="ar"] .leading-normal,
+  .arabic-text.leading-normal {
+    line-height: 1.55 !important;
+  }
+}
+
+/* Universal scrollbar hiding - preserves scrolling behavior but removes visual bar */
+*, *::before, *::after, html, body {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Hide scrollbars for clean mobile appearance */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth scrolling and native touch momentum */
+html, body, .no-scrollbar, [class*="overflow-"] {
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes toast-shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
